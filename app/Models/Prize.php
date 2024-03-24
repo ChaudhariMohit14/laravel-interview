@@ -17,5 +17,22 @@ class Prize extends Model
     public  static function nextPrize()
     {
         // TODO: Implement nextPrize() logic here.
+
+        $prizes = Prize::all();
+
+        $total_probability = $prizes-> sum('probability');
+
+        $randomNumber = mt_rand(0, $total_probability*100)/100;
+
+        $cumulativeProbability = 0;
+        foreach($prizes as $prize){
+            $cumulativeProbability += $prize->probability;
+            
+            if($randomNumber <= $cumulativeProbability){
+                return $prize;
+            }
+        }
+
+        return null;
     }
 }
